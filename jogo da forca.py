@@ -112,7 +112,8 @@ def Ganhou(palavra_escolhida, tentativas):  # função para checar se ganhou o j
     else:
         return False
 
-def Popup_Escolha(ganhou): # função para criar o popup pra decidir se continua jogando ou não
+# função para criar o popup pra decidir se continua jogando ou não
+def Popup_Escolha(ganhou): 
 
     layout_ganhar = [ # Layout dos botões caso ganhar
             [sg.Text('Parabéns, você venceu. Deseja jogar novamente ?')],
@@ -124,23 +125,26 @@ def Popup_Escolha(ganhou): # função para criar o popup pra decidir se continua
             [sg.B('Sim !', button_color='Green'), sg.B('Não.', button_color='Red')],
             ]
 
-    # Verifica se ganhou e cria a tela baseado nisso
+    # Verifica se ganhou e cria o popup baseado nisso
     if ganhou == True: 
-        window = sg.Window('Fim de jogo', layout_ganhar) 
+        Window = sg.Window('Fim de jogo', layout_ganhar) 
 
     else:
-        window = sg.Window('Fim de jogo', layout_perder)
+        Window = sg.Window('Fim de jogo', layout_perder)
 
-    events, values = window.read() # lê o valor no qual o botão clicado fornece
+    events, values = Window.read() # lê o valor no qual o botão clicado fornece
 
-    # Se o botão clicado for o de sim, vai retornar verdadeiro, reiniciando, ou falso, saindo
-    if events == 'Sim !': # ainda preciso mexer nisso (1)
-        end_game = False
-    else:
+    if events == 'Sim !': #Se ele disse sim, sorteia a palavra novamente e fecha o popup
         end_game = True
-    
+        Sorteando_palavra_e_tipo(lista_tipo, tipo_palavra, palavra_escolhida, nomes, end_game)
+        Window.close()
 
-
+    else:
+        end_game = True  #Se ele disse não, fecha tudo
+        Window.close()
+        pg.quit()
+        quit()
+        
 while True:
     for event in pg.event.get():
         if event.type == pg.QUIT:
@@ -148,19 +152,8 @@ while True:
             quit()
         if event.type == pg.KEYDOWN:
             letra = str(pg.key.name(event.key)).lower()
-
-    
-    #reiniciando o jogo
-    if(chances == 6 or Ganhou(palavra_escolhida, tentativas) == True):
-       
-        end_game = True
-        tentativas = [' ', '-']
-        chances = 0
-        letra = ''
-        tipo_palavra = []
         
-    #jogo
-        
+    #jogo  
     desenho_da_forca(window, chances)
     palavra_escolhida, nomes, end_game = Sorteando_palavra_e_tipo(lista_tipo, tipo_palavra, palavra_escolhida, nomes, end_game)
     palavra_camuflada = Camuflando_palavra(palavra_escolhida, palavra_camuflada, tentativas)
@@ -173,7 +166,31 @@ while True:
     window.blit(texto, (450, 100))
 
     texto_principal = font_textop.render('Jogo Da Forca', True, branco)
-    window.blit(texto_principal, (220, 20))   
+    window.blit(texto_principal, (220, 20)) 
 
-    
+    #reiniciando o jogo
+    if(chances == 6 or Ganhou(palavra_escolhida, tentativas) == True):
+       
+        end_game = True
+
+        if (Ganhou(palavra_escolhida, tentativas) == True):
+            ganhou = True #Diz que ele ganhou para aparecer o popup correto
+            Popup_Escolha(ganhou)
+
+            #Reinicia todas as variáveis
+            tentativas = [' ', '-']
+            chances = 0
+            letra = ''
+            tipo_palavra = []
+
+        else:
+            ganhou = False #Diz que ele não ganhou para aparecer o popup correto
+            Popup_Escolha(ganhou)
+
+            #Reinicia todas as variáveis
+            tentativas = [' ', '-']
+            chances = 0
+            letra = ''
+            tipo_palavra = []
+
     pg.display.update()
