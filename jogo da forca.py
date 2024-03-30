@@ -121,7 +121,8 @@ def Popup_Escolha(ganhou):
             ]
     
     layout_perder = [ # Layout do botões caso perder
-            [sg.Text("Que pena, você perdeu. Deseja jogar novamente ?")],
+            [sg.Text("Que pena, você perdeu, a palavra era:"), sg.Text(palavra_escolhida)],
+            [sg.Text("Deseja tentar novamente ?")],
             [sg.B('Sim !', button_color='Green'), sg.B('Não.', button_color='Red')],
             ]
 
