@@ -1,5 +1,6 @@
 import pygame as pg
 import random
+import PySimpleGUI as sg
 
 # cores do jogo
 preto = (0, 0, 0)
@@ -10,7 +11,7 @@ marrom = (80, 48, 30)
 # tela do jogo
 largura, altura = 800, 600
 window = pg.display.set_mode((largura, altura))
-pg.display.set_caption("Imagem de Fundo")
+pg.display.set_caption("Jogo da forca")
 
 # fonte do jogo
 pg.font.init()
@@ -20,11 +21,11 @@ font_textop = pg.font.SysFont('Courier new', 50)
 
 # palavras possiveis
 # listas de palavras (o nome da lista é o tipo)
-objeto = ["caneta", "relógio", "tesoura", "abajur", "chaveiro"]
-comida = ["pizza", "salada", "hambúrguer", "brigadeiro", "macarrão"]
-fruta = ["maçã", "banana", "uva", "laranja", "abacaxi"]
+objeto = ["caneta", "relogio", "tesoura", "abajur", "chaveiro"]
+comida = ["pizza", "salada", "hamburguer", "brigadeiro", "macarrao"]
+fruta = ["maca", "banana", "uva", "laranja", "abacaxi"]
 lugar = ["praia", "parque", "cinema", "biblioteca", "restaurante"]
-transporte = ["bicicleta", "carro", "ônibus", "avião", "trem"]
+transporte = ["bicicleta", "carro", "onibus", "aviao", "trem"]
 
 lista_tipo = [objeto, comida, fruta, lugar,
               transporte]  # lista das listas de tipo
@@ -123,6 +124,41 @@ def Ganhou(palavra_escolhida, tentativas):  # função para checar se ganhou o j
         return True
     else:
         return False
+      
+# função para criar o popup pra decidir se continua jogando ou não
+def Popup_Escolha(ganhou): 
+
+    layout_ganhar = [ # Layout dos botões caso ganhar
+            [sg.Text('Parabéns, você venceu, a palavra era:'), sg.Text(palavra_escolhida)],
+            [sg.Text('Deseja tentar novamente ?')],
+            [sg.B('Sim !', button_color='Green'), sg.B('Não.', button_color='Red')],
+            ]
+    
+    layout_perder = [ # Layout do botões caso perder
+            [sg.Text("Que pena, você perdeu, a palavra era:"), sg.Text(palavra_escolhida)],
+            [sg.Text("Deseja tentar novamente ?")],
+            [sg.B('Sim !', button_color='Green'), sg.B('Não.', button_color='Red')],
+            ]
+
+    # Verifica se ganhou e cria o popup baseado nisso
+    if ganhou == True: 
+        Window = sg.Window('Fim de jogo', layout_ganhar) 
+
+    else:
+        Window = sg.Window('Fim de jogo', layout_perder)
+
+    events, values = Window.read() # lê o valor no qual o botão clicado fornece
+
+    if events == 'Sim !': #Se ele disse sim, sorteia a palavra novamente e fecha o popup
+        end_game = True
+        Sorteando_palavra_e_tipo(lista_tipo, tipo_palavra, palavra_escolhida, nomes, end_game)
+        Window.close()
+
+    else:
+        end_game = True  #Se ele disse não, fecha tudo
+        Window.close()
+        pg.quit()
+        quit()
 
 
 while True:
@@ -132,15 +168,6 @@ while True:
             quit()
         if event.type == pg.KEYDOWN:
             letra = str(pg.key.name(event.key)).lower()
-
-    # reiniciando o jogo
-    if (chances == 6 or Ganhou(palavra_escolhida, tentativas) == True):
-
-        end_game = True
-        tentativas = [' ', '-']
-        chances = 0
-        letra = ''
-        tipo_palavra = []
 
     # jogo
 
@@ -160,5 +187,30 @@ while True:
 
     texto_principal = font_textop.render('Jogo Da Forca', True, branco)
     window.blit(texto_principal, (220, 20))
+
+    #reiniciando o jogo
+    if(chances == 6 or Ganhou(palavra_escolhida, tentativas) == True):
+       
+        end_game = True
+
+        if (Ganhou(palavra_escolhida, tentativas) == True):
+            ganhou = True #Diz que ele ganhou para aparecer o popup correto
+            Popup_Escolha(ganhou)
+
+            #Reinicia todas as variáveis
+            tentativas = [' ', '-']
+            chances = 0
+            letra = ''
+            tipo_palavra = []
+
+        else:
+            ganhou = False #Diz que ele não ganhou para aparecer o popup correto
+            Popup_Escolha(ganhou)
+
+            #Reinicia todas as variáveis
+            tentativas = [' ', '-']
+            chances = 0
+            letra = ''
+            tipo_palavra = []
 
     pg.display.update()
