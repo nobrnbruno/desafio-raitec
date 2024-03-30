@@ -26,7 +26,7 @@ fruta = ["maçã", "banana", "uva", "laranja", "abacaxi"]
 lugar = ["praia", "parque", "cinema", "biblioteca", "restaurante"]
 meio_de_transporte = ["bicicleta", "carro", "ônibus", "avião", "trem"]
 
-lista_tipo = [fruta, objeto, automovel] #lista das listas de tipo
+lista_tipo = [objeto, comida, fruta, lugar, meio_de_transporte] #lista das listas de tipo
 
 #iniciando as variaveis
 tipo_palavra = [' ', '-']
