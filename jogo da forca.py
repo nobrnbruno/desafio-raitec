@@ -11,7 +11,7 @@ marrom = (80, 48, 30)
 #tela do jogo
 largura, altura = 800, 600
 window = pg.display.set_mode((largura, altura))
-pg.display.set_caption("Imagem de Fundo")
+pg.display.set_caption("Jogo da forca")
 
 #fonte do jogo
 pg.font.init()
@@ -116,7 +116,8 @@ def Ganhou(palavra_escolhida, tentativas):  # função para checar se ganhou o j
 def Popup_Escolha(ganhou): 
 
     layout_ganhar = [ # Layout dos botões caso ganhar
-            [sg.Text('Parabéns, você venceu. Deseja jogar novamente ?')],
+            [sg.Text('Parabéns, você venceu, a palavra era:'), sg.Text(palavra_escolhida)],
+            [sg.Text('Deseja tentar novamente ?')],
             [sg.B('Sim !', button_color='Green'), sg.B('Não.', button_color='Red')],
             ]
     
