@@ -60,6 +60,7 @@ def Desenhar_Botao_Restart(janela):
 
 
 def Sortear_Palavra(palavras, palavraEscolhida, terminarJogo):
+    # sorteia uma palavra a cada vez que o jogo recomeça #
     if terminarJogo == True:
         palavraIndice = random.randint(0, len(palavras) - 1)
         palavraEscolhida = palavras[palavraIndice]
@@ -69,6 +70,7 @@ def Sortear_Palavra(palavras, palavraEscolhida, terminarJogo):
 
 
 def Camuflar_Palavra(palavraEscolhida, palavraAnonima, tentativasDeLetras):
+    # deixa a palavra na tela escondida para o usuário #
     palavraAnonima = palavraEscolhida
     for n in range(len(palavraAnonima)):
         if palavraAnonima[n:n + 1] not in tentativasDeLetras:
@@ -78,11 +80,13 @@ def Camuflar_Palavra(palavraEscolhida, palavraAnonima, tentativasDeLetras):
 
 
 def Escrever_Palavra(window, palavraAnonima):
+    # renderiza palavra escolhida já camuflada na tela #
     palavra = fonteSistema.render(palavraAnonima, 1, branco)
     window.blit(palavra, (200, 500))
 
 
 def Tentar_Letra(tentativasDeLetras, palavraEscolhida, letra, chances):
+    # verifica se a letra digitada está ou não na palavra escolhida #
     if letra not in tentativasDeLetras:
         tentativasDeLetras.append(letra)
         if letra not in palavraEscolhida:
