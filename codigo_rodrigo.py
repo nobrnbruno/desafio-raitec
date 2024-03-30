@@ -19,10 +19,12 @@ font = pg.font.SysFont('Courier new', 35)
 font_textop = pg.font.SysFont('Courier new', 50)
 
 #palavras possiveis
-
-fruta = ["banana", "laranja", "maracuja", "limao"] # listas de palavras (o nome da lista é o tipo)
-objeto = ["borracha", "caneta", "lapis"]
-automovel = ["carro", "moto", "caminhao"]
+# listas de palavras (o nome da lista é o tipo)
+objeto = ["caneta", "relógio", "tesoura", "abajur", "chaveiro"]
+comida = ["pizza", "salada", "hambúrguer", "brigadeiro", "macarrão"]
+fruta = ["maçã", "banana", "uva", "laranja", "abacaxi"]
+lugar = ["praia", "parque", "cinema", "biblioteca", "restaurante"]
+meio_de_transporte = ["bicicleta", "carro", "ônibus", "avião", "trem"]
 
 lista_tipo = [fruta, objeto, automovel] #lista das listas de tipo
 
