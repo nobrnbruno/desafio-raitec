@@ -15,16 +15,15 @@ pg.display.set_caption("Jogo da forca")
 
 # fonte do jogo
 pg.font.init()
-
-font = pg.font.SysFont('Courier new', 35)
-font_textop = pg.font.SysFont('Courier new', 50)
+font_giz_peq = pg.font.Font('chawp.ttf', 30)
+font_giz_grd = pg.font.Font('Chalk-Regular.ttf', 50)
 
 # palavras possiveis
 # listas de palavras (o nome da lista é o tipo)
 objeto = ["caneta", "relogio", "tesoura", "abajur", "chaveiro"]
-comida = ["pizza", "salada", "hamburguer", "brigadeiro", "macarrao"]
+comida = ["pizza", "salada", "sanduiche", "pudim", "macarrao"]
 fruta = ["maca", "banana", "uva", "laranja", "abacaxi"]
-lugar = ["praia", "parque", "cinema", "biblioteca", "restaurante"]
+lugar = ["praia", "parque", "cinema", "livraria", "shopping"]
 transporte = ["bicicleta", "carro", "onibus", "aviao", "trem"]
 
 lista_tipo = [objeto, comida, fruta, lugar,
@@ -47,28 +46,27 @@ def desenho_da_forca(window, chances):
         background_image, (largura, altura))  # redimensiona a imagem
     window.blit(background_image, (0, 0))
 
-    pg.draw.line(window, marrom, (100, 500), (100, 100), 10)
-    pg.draw.line(window, marrom, (50, 500), (150, 500), 10)
-    pg.draw.line(window, marrom, (100, 100), (300, 100), 10)
-    pg.draw.line(window, marrom, (300, 100), (300, 150), 10)
+    pg.draw.line(window, marrom, (80, 500), (80, 100), 10)
+    pg.draw.line(window, marrom, (30, 500), (130, 500), 10)
+    pg.draw.line(window, marrom, (76, 100), (245, 100), 10)
+    pg.draw.line(window, marrom, (240, 100), (240, 150), 10)
 
     if chances >= 1:
-        pg.draw.circle(window, branco, (300, 200), 50, 10)
+        pg.draw.circle(window, branco, (240, 200), 50, 10)
     if chances >= 2:
-        pg.draw.line(window, branco, (300, 250), (300, 350), 10)
+        pg.draw.line(window, branco, (240, 250), (240, 350), 10)
     if chances >= 3:
-        pg.draw.line(window, branco, (300, 260), (225, 350), 10)
+        pg.draw.line(window, branco, (240, 260), (175, 350), 10)
     if chances >= 4:
-        pg.draw.line(window, branco, (300, 260), (375, 350), 10)
+        pg.draw.line(window, branco, (240, 260), (305, 350), 10)
     if chances >= 5:
-        pg.draw.line(window, branco, (300, 350), (375, 450), 10)
+        pg.draw.line(window, branco, (240, 350), (305, 450), 10)
     if chances >= 6:
-        pg.draw.line(window, branco, (300, 350), (225, 450), 10)
-
-# função que retorna a lista da categoria escolhida e seu nome
+        pg.draw.line(window, branco, (240, 350), (175, 450), 10)
 
 
 def Nome_tipo(lista):
+    # função que retorna a lista da categoria escolhida e seu nome
     tipo_palavra = random.choice(lista)  # escolhe aleatoriamente uma categoria
     for nome, valor in globals().items():
         if valor == tipo_palavra:
@@ -88,12 +86,13 @@ def Sorteando_palavra_e_tipo(lista_tipo, tipo_palavra, palavra_escolhida, nomes,
 
 
 def Camuflando_palavra(palavra_escolhida, palavra_camuflada, tentativas):
-    palavra_camuflada = palavra_escolhida
-    for n in range(len(palavra_camuflada)):
-        if palavra_camuflada[n:n + 1] not in tentativas:
-            palavra_camuflada = palavra_camuflada.replace(
-                palavra_camuflada[n], '_')
-    return palavra_camuflada
+    palavra_camuflada = ''
+    for letra in palavra_escolhida:
+        if letra in tentativas:
+            palavra_camuflada += letra + '  '
+        else:
+            palavra_camuflada += '_ '
+    return palavra_camuflada.strip()
 
 
 def Tentativa_de_letra(tentativas, palavra_escolhida, letra, chances):
@@ -109,8 +108,8 @@ def Tentativa_de_letra(tentativas, palavra_escolhida, letra, chances):
 
 
 def Palavra_do_jogo(palavra_escolhida, window):
-    palavra = font.render(palavra_camuflada, True, branco)
-    window.blit(palavra, (450, 450))
+    palavra = font_giz_peq.render(palavra_camuflada.upper(), True, branco)
+    window.blit(palavra, (360, 475))
 
 
 def Ganhou(palavra_escolhida, tentativas):  # função para checar se ganhou o jogo
@@ -124,38 +123,44 @@ def Ganhou(palavra_escolhida, tentativas):  # função para checar se ganhou o j
         return True
     else:
         return False
-      
-# função para criar o popup pra decidir se continua jogando ou não
-def Popup_Escolha(ganhou): 
 
-    layout_ganhar = [ # Layout dos botões caso ganhar
-            [sg.Text('Parabéns, você venceu, a palavra era:'), sg.Text(palavra_escolhida)],
-            [sg.Text('Deseja tentar novamente ?')],
-            [sg.B('Sim !', button_color='Green'), sg.B('Não.', button_color='Red')],
-            ]
-    
-    layout_perder = [ # Layout do botões caso perder
-            [sg.Text("Que pena, você perdeu, a palavra era:"), sg.Text(palavra_escolhida)],
-            [sg.Text("Deseja tentar novamente ?")],
-            [sg.B('Sim !', button_color='Green'), sg.B('Não.', button_color='Red')],
-            ]
+
+def Popup_Escolha(ganhou):
+    # função para criar o popup pra decidir se continua jogando ou não
+
+    layout_ganhar = [  # Layout dos botões caso ganhar
+        [sg.Text('Parabéns, você venceu, a palavra era:'),
+         sg.Text(palavra_escolhida.upper())],
+        [sg.Text('Deseja tentar novamente?')],
+        [sg.B('Sim !', button_color='Green'),
+         sg.B('Não.', button_color='Red')],
+    ]
+
+    layout_perder = [  # Layout do botões caso perder
+        [sg.Text("Que pena, você perdeu, a palavra era:"),
+         sg.Text(palavra_escolhida.upper())],
+        [sg.Text("Deseja tentar novamente?")],
+        [sg.B('Sim !', button_color='Green'),
+         sg.B('Não.', button_color='Red')],
+    ]
 
     # Verifica se ganhou e cria o popup baseado nisso
-    if ganhou == True: 
-        Window = sg.Window('Fim de jogo', layout_ganhar) 
+    if ganhou == True:
+        Window = sg.Window('Fim de jogo', layout_ganhar)
 
     else:
         Window = sg.Window('Fim de jogo', layout_perder)
 
-    events, values = Window.read() # lê o valor no qual o botão clicado fornece
+    events, values = Window.read()  # lê o valor no qual o botão clicado fornece
 
-    if events == 'Sim !': #Se ele disse sim, sorteia a palavra novamente e fecha o popup
+    if events == 'Sim !':  # Se ele disse sim, sorteia a palavra novamente e fecha o popup
         end_game = True
-        Sorteando_palavra_e_tipo(lista_tipo, tipo_palavra, palavra_escolhida, nomes, end_game)
+        Sorteando_palavra_e_tipo(
+            lista_tipo, tipo_palavra, palavra_escolhida, nomes, end_game)
         Window.close()
 
     else:
-        end_game = True  #Se ele disse não, fecha tudo
+        end_game = True  # Se ele disse não, fecha tudo
         Window.close()
         pg.quit()
         quit()
@@ -182,32 +187,32 @@ while True:
 
     # mostrando a categoria na tela
     # pega a ultima posição da lista nomes e mostra na tela
-    texto = font.render(nomes[len(nomes) - 1], True, branco)
-    window.blit(texto, (450, 100))
+    texto = font_giz_grd.render(nomes[len(nomes) - 1], True, branco)
+    window.blit(texto, (435, 150))
 
-    texto_principal = font_textop.render('Jogo Da Forca', True, branco)
+    texto_principal = font_giz_grd.render('Jogo  da  Forca', True, branco)
     window.blit(texto_principal, (220, 20))
 
-    #reiniciando o jogo
-    if(chances == 6 or Ganhou(palavra_escolhida, tentativas) == True):
-       
+    # reiniciando o jogo
+    if (chances >= 6 or Ganhou(palavra_escolhida, tentativas) == True):
+
         end_game = True
 
         if (Ganhou(palavra_escolhida, tentativas) == True):
-            ganhou = True #Diz que ele ganhou para aparecer o popup correto
+            ganhou = True  # Diz que ele ganhou para aparecer o popup correto
             Popup_Escolha(ganhou)
 
-            #Reinicia todas as variáveis
+            # Reinicia todas as variáveis
             tentativas = [' ', '-']
             chances = 0
             letra = ''
             tipo_palavra = []
 
         else:
-            ganhou = False #Diz que ele não ganhou para aparecer o popup correto
+            ganhou = False  # Diz que ele não ganhou para aparecer o popup correto
             Popup_Escolha(ganhou)
 
-            #Reinicia todas as variáveis
+            # Reinicia todas as variáveis
             tentativas = [' ', '-']
             chances = 0
             letra = ''
